@@ -1,39 +1,46 @@
 #include <iostream>
-#include <vector>
-#include <algorithm>
 
-using namespace std;
-
-bool cmp(int a, int b){
-    return a > b;
-}
-
-int solution(vector<vector<int>> card){
-    vector<int> v;
-    for(int i=0; i<card.size(); i++){
-        int small = card[i][0];
-        for(int j=0; j<card[i].size(); j++){
-            if(small > card[i][j])
-                small = card[i][j];
+int solution(int N, int M, int** num)
+{
+    int max = 0;
+    for(int i=0; i<N; ++i)
+    {
+        int min = 10001;
+        for(int j=0; j<M; ++j)
+        {
+            min = std::min(min,num[i][j]);
         }
-        v.emplace_back(small);
+        max = std::max(max,min);
     }
-    sort(v.begin(), v.end(), cmp);
-    return v[0];
+    return max;    
 }
 
-int main(){
+int main()
+{
     int N, M;
-    cin >> N >> M;
-    vector<vector<int>> card;
-    for(int i=0; i<N; i++){
-        vector<int> v;
-        for(int j=0; j<M; j++){
-            int temp;
-            cin >> temp;
-            v.emplace_back(temp);
-        }
-        card.emplace_back(v);
+    std::cin >> N >> M;
+    
+    int** num = new int*[N];
+    for(int i=0; i<N; ++i)
+    {
+        num[i] = new int[M];
     }
-    cout << solution(card);
+
+    for(int i=0; i<N; ++i)
+    {
+        for(int j=0; j<M; ++j)
+        {   
+            int input;
+            std::cin >> input;
+            num[i][j] = input;
+        }
+    }
+
+    std::cout << solution(N, M, num);
+
+    for(int i=0; i<N; ++i)
+    {
+        delete[] num[i];
+    }
+    delete[] num;
 }

@@ -1,23 +1,37 @@
 #include <iostream>
 
-using namespace std;
-
-int solution(int N, int K){
+int solution(int N, int K)
+{
     int answer = 0;
-    while(N != 1){
-        if(N%K != 0){
-            answer += N%K;
-            N -= N%K;
+
+    while(true)
+    {
+        if(N < K)
+        {
+            break;
         }
-        else{
-            N = N/K;
-            answer++;
+        
+        if(N % K != 0)
+        {
+            answer += N % K;
+            N -= N % K;
+        }
+        else
+        {
+            ++answer;
+            N /= K;
         }
     }
+
+    answer += N-1;
+
     return answer;
 }
-int main(){
+
+int main()
+{
     int N, K;
-    cin >> N >> K;
-    cout << solution(N,K);
+    std::cin >> N >> K;
+
+    std::cout << solution(N,K);
 }
