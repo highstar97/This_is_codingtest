@@ -1,33 +1,42 @@
 #include <iostream>
-#include <vector>
 
-using namespace std;
-
-int N;
-string plan;
-
-int main(){
-    cin >> N;
-    cin.ignore();   // buffer에서 \n을 지워야 함.
-    getline(cin,plan);
-    int i = 1, j = 1;
-    for(int k=0; k<plan.size(); k++){
-        if(plan[k]=='U'){
-            if(i > 1)
-                i--;
+void solution(int N, std::string plan)
+{
+    int x = 1, y = 1;
+    for(int i=0; i<plan.size(); ++i)
+    {
+        if(plan[i] == ' ')
+        {
+            continue;
         }
-        else if(plan[k]=='D'){
-            if(i < N)
-                i++;
+        else if(plan[i] == 'U' && x > 1)
+        {
+            --x;
         }
-        else if(plan[k]=='L'){
-            if(j > 1)
-                j--;
+        else if(plan[i] == 'D' && x < N)
+        {
+            ++x;
         }
-        else if(plan[k]=='R'){
-            if(j < N)
-                j++;
+        else if(plan[i] == 'L' && y > 1)
+        {
+            --y;
+        }
+        else if(plan[i] == 'R' && y < N)
+        {
+            ++y;
         }
     }
-    cout << i << " " << j;
+    std::cout << x << " " << y;
+}
+
+int main()
+{
+    int N;
+    std::string plan;
+
+    std::cin >> N;
+    std::cin.ignore();
+    getline(std::cin, plan);
+
+    solution(N,plan);
 }

@@ -1,70 +1,82 @@
 #include <iostream>
-#include <vector>
 
-using namespace std;
+int solution(int N, int M, int A, int B, int d, int **map)
+{
+    int answer = 1;
 
-int answer = 1;
-int N, M;
-int x, y, d;
-vector<pair<int,int>> _move = {{-1,0},{0,1},{1,0},{0,-1}};
-vector<pair<int,int>> _back = {{1,0},{0,-1},{-1,0},{0,1}};
+    int dx[4] = {0, 1, 0, -1};
+    int dy[4] = {-1, 0, 1, 0};
 
-int main(){
-    cin >> N >> M;
-    cin >> x >> y >> d;
-    vector<vector<char>> map(N,vector<char>(M,'0'));
-    vector<vector<int>> visited(N,vector<int>(M,0));
-    for(int i=0; i<N; i++){
-        for(int j=0; j<M; j++){
-            char c;
-            cin >> c;
-            map[i][j] = c;
-        }
-    }
-
-    // 계획대로 움직이기
-    bool finish = false;
-    while (finish == false){
-        int start_d = d;
-        int next_d = d;
-        visited[x][y] = 1;  // 현재 위치는 방문한 것으로 표시
-        while (true){
-            if(next_d==0)
-                next_d = next_d+3;
-            else 
-                next_d = --next_d;
-            int nx = x + _move[next_d].first;
-            int ny = y + _move[next_d].second;
-            // 이동 좌표가 맵 범위 내 일때만 실행
-            if (0 <= nx && nx < N && 0 <= ny && ny < M){
-                if (map[nx][ny] == '0' && visited[nx][ny] == 0){
-                    x = nx;
-                    y = ny;
-                    d = next_d;
-                    answer++; // 이동에 성공
-                    break;
-                }
+    while (true)
+    {
+        bool can_move = false;
+        for (int i = 0; i < 4; ++i)
+        {
+            int index = abs(d + i - 3);
+            if (!(0 <= A + dx[index] && A + dx[index] < M && 0 <= B + dy[index] && B + dy[index] < N))
+            {
+                continue;
             }
-            // 만약 제자리에서 360도 돌았다면
-            if(next_d == start_d){
-                // 뒤로 이동 준비
-                nx = x + _back[start_d].first;
-                ny = y + _back[start_d].second;
-                if (0 <= nx && nx < N && 0 <= ny && ny < M){
-                    // 뒤가 바다라면 움직임을 종료
-                    if(map[nx][ny] == '1'){
-                        finish = true;
-                    }
-                    // 돌아갈 육지가 있으면 뒤로 이동, 방문 아님
-                    else{
-                        x = nx;
-                        y = ny;
-                    }
-                }
+            if (map[A + dx[index]][B + dy[index]] == 0)
+            {
+                ++answer;
+                map[A][B] = 2;
+                A += dx[index];
+                B += dy[index];
+                d = index;
+                can_move = true;
+                break;
+            }
+        }
+        if (can_move == false)
+        {
+            int index = (d + 2) % 4;
+            if (!(0 <= A + dx[index] && A + dx[index] < M && 0 <= B + dy[index] && B + dy[index] < N))
+            {
+                break;
+            }
+            if (map[A + dx[index]][B + dy[index]] == 2)
+            {
+                map[A][B] = 2;
+                A += dx[index];
+                B += dy[index];
+            }
+            else
+            {
                 break;
             }
         }
     }
+    return answer;
+}
 
-    cout << answer;
+int main()
+{
+    int N, M, A, B, d;
+    std::cin >> N >> M;
+    std::cin >> A >> B >> d;
+
+    int **map = new int *[N];
+    for (int i = 0; i < N; ++i)
+    {
+        map[i] = new int[M];
+    }
+
+    for (int i = 0; i < N; ++i)
+    {
+        for (int j = 0; j < M; ++j)
+        {
+            int input;
+            std::cin >> input;
+            map[i][j] = input;
+        }
+    }
+
+    std::cout << solution(N, M, A, B, d, map);
+
+    for (int i = 0; i < N; ++i)
+    {
+        delete[] map[i];
+    }
+    delete[] map;
 }

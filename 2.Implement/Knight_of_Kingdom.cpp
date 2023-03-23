@@ -1,29 +1,28 @@
 #include <iostream>
-#include <vector>
 
-using namespace std;
+int solution(std::string start_location)
+{
+    int answer = 0;
+    int x = start_location[0] - 'a';
+    int y = start_location[1] - '1';
 
-int main(){
-    int answer = 8;
-    string start;
-    vector<pair<int,int>> location;
+    int dx[8] = {+1, +2, +2, +1, -1, -2, -2, -1};
+    int dy[8] = {+2, +1, -1, -2, -2, -1, +1, +2};
 
-    cin >> start;
-    int i = start[0] - 'a';
-    int j = start[1] - '1';
-    location.emplace_back(make_pair(i-2,j-1));
-    location.emplace_back(make_pair(i-2,j+1));
-    location.emplace_back(make_pair(i-1,j-2));
-    location.emplace_back(make_pair(i-1,j+2));
-    location.emplace_back(make_pair(i+1,j-2));
-    location.emplace_back(make_pair(i+1,j+2));
-    location.emplace_back(make_pair(i+2,j-1));
-    location.emplace_back(make_pair(i+2,j+1));
-
-    for(auto data : location){
-        if(data.first < 0 || data.first > 7 || data.second < 0 || data.second > 7)
-            answer--;
+    for(int i=0; i<8; ++i)
+    {
+        if(0 <= x+dx[i] && x+dx[i] <= 7 && 0 <= y+dy[i] && y+dy[i] <= 7)
+        {
+            ++answer;
+        }
     }
+    return answer;
+}
 
-    cout << answer;
+int main()
+{
+    std::string start_location;
+    std::cin >> start_location;
+
+    std::cout << solution(start_location);
 }
